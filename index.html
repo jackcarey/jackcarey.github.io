@@ -1,0 +1,19 @@
+---
+title: Jack Carey
+layout: articles
+noSearch: true
+---
+{%comment %}Content for this page is rendered from the index_collection{%endcomment%}
+{% for item in site.index_collection %}
+{%capture itemRef %}
+    {% if item.hash %}
+        {{item.hash}}
+    {% else %}
+        {{item.title | downcase | slugify }}
+    {% endif %}
+{%endcapture%}
+{% assign itemRef = itemRef | strip %}
+<article id="{{ itemRef | strip }}" data-title="{{item.title | strip}}" class="panel {{item.className | default:""}}">
+    {{item.content}}
+</article>
+{%endfor%}

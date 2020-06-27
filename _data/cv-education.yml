@@ -1,0 +1,16 @@
+# Required: start (date), qualification, subject
+# Optional: location, end (date or 'present'), result, description, hidden
+- location: Sheffield Hallam University
+  start: September 2019
+  end: September 2024
+  qualification: MEng
+  subject:  Software Engineering (BCS)
+  result: Present
+- start: August 2019
+  qualification: IOSH
+  subject: Managing Safely
+  result: Pass
+- start: June 2019
+  qualification: Xero
+  subject: Certified Advisor
+  result: Pass

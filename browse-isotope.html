@@ -1,0 +1,188 @@
+---
+title: "Browse"
+layout: "articles"
+permalink: /browse
+---
+
+{%comment%}This page makes use of Isotope (https://isotope.metafizzy.com) to filter items{%endcomment%}
+{% capture strList %}
+{%assign str = "" %}
+{%comment%}Make a string of unique categories and tags across the site{%endcomment%}
+{%comment%}Site categories, from posts and collections{%endcomment%}
+{%for row in site.categories %}
+{% if str contains row[0] %}{%else%}
+{%assign str = {{str | append: row[0] | append: ","}} %}
+{%endif%}
+{%endfor%}
+{%comment%}Site tags, from posts and collections{%endcomment%}
+{%for row in site.tags %}
+{% if str contains row[0] %}{%else%}
+{%assign str = {{str | append: row[0] | append: ","}} %}
+{%endif%}
+{%endfor%}
+{%comment%} Page tags and cats need to be parsed{%endcomment%}
+{%for page in site.html_pages %}
+{%unless page.noSearch==true %}
+
+{%comment%}Page tags{%endcomment%}
+{% assign pageTags = {{page.tags|split:" "}} %}
+{%for tag in pageTags %}
+{% if str contains tag %}{%else%}
+{%assign str = {{str | append: tag | append: ","}} %}
+{%endif%}
+{%endfor%}
+
+{%comment%}Page categories{%endcomment%}
+{% assign pageCats = {{page.categories|split:" "}} %}
+{%for cat in pageCats %}
+{% if str contains cat %}{%else%}
+{%assign str = {{str | append: cat | append: ","}} %}
+{%endif%}
+{%endfor%}
+{%endunless%}
+{%endfor%}
+{{str}}
+{% endcapture%}
+{%comment%}Remove the whitespace and turn it into an indexable array{%endcomment%}
+{% assign strList = {{strList| strip | split: "," | uniq | sort}} %}
+<article class="no-bottom">
+    <div id="filters" style="padding:0.25em;font-size:smaller;">
+        <span style="padding-left:1em;font-size:large;vertical-align:bottom; ">Filter: </span>
+        <a href="#" class="isotope-link">All</a> | 
+        {%for str in strList %}
+        {%include /snippets/isotope_link.html label=str %}
+        {%endfor%}
+    </div>
+    <div>
+        <ul id="filter-list" class="block no-decor">
+            <!--Projects-->
+            {%for project in site.project_collection %}
+            {%unless project.noSearch%}
+
+            {%assign str="" %}
+            {%assign fullStr = {{project.categories | append: " " | append: project.tags | append: " "}} %}
+            {%assign array = {{fullStr | split: " "}} %}
+            {%capture classStr %}
+            {%for word in array %}
+            {%assign formattedWord = {{word|downcase|slugify}} %}
+            {% if str contains formattedWord %}{%else%}
+            {% assign str = {{str | append: formattedWord | append: " "}} %}
+            {%endif%}
+            {%endfor%}
+            {{str}}
+            {%endcapture%}
+
+            <li class="{{classStr | strip_newlines | strip}}">
+                <a href="{{project.url}}">{{project.title||project.name}}</a>
+            </li>
+            {%endunless%}
+            {% endfor %}
+            <!--Posts-->
+            {%for post in site.posts %}
+            {%unless post.noSearch %}
+
+            {%assign str="" %}
+            {%assign fullStr = {{post.categories | append: " " | append: post.tags | append: " "}} %}
+            {%assign array = {{fullStr | split: " "}} %}
+            {%capture classStr %}
+            {%for word in array %}
+            {%assign formattedWord = {{word|downcase|slugify}} %}
+            {% if str contains formattedWord %}{%else%}
+            {% assign str = {{str | append: formattedWord | append: " "}} %}
+            {%endif%}
+            {%endfor%}
+            {{str}}
+            {%endcapture%}
+
+            <li class="{{classStr | strip_newlines | strip}}">
+                <a href="{{post.url}}">{{post.title||post.name}}</a>
+            </li>
+            {%endunless%}
+            {% endfor %}
+            <!--Pages-->
+            {%for page in site.html_pages %}
+            {%unless page.noSearch%}
+
+            {%assign str="" %}
+            {%assign fullStr = {{page.categories | append: " " | append: page.tags | append: " "}} %}
+            {%assign array = {{fullStr | split: " "}} %}
+            {%capture classStr %}
+            {%for word in array %}
+            {%assign formattedWord = {{word|downcase|slugify}} %}
+            {% if str contains formattedWord %}{%else%}
+            {% assign str = {{str | append: formattedWord | append: " "}} %}
+            {%endif%}
+            {%endfor%}
+            {{str}}
+            {%endcapture%}
+
+            <li class="{{classStr | strip_newlines | strip}}">
+                <a href="{{page.url}}">{{page.title||page.name}}</a>
+            </li>
+            {%endunless%}
+            {% endfor %}
+            <!--Nav Links-->
+            {%for link in site.data.navigation %}
+            {%unless link.noSearch %}
+            <li class="nav-{{link.name|downcase|slugify}}">
+                <a
+                    href="{%if link.url %}{{link.url}}{%else%}/#{% if link.hash %}{{link.hash}}{% else %}{{link.name | downcase | slugify }}{% endif %}{% endif %}">{{link.name}}</a>
+            </li>
+            {%endunless%}
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+<script type="text/javascript">
+    {% comment %} From: http://jsfiddle.net/Paulpro/x92hn/2/ {%endcomment%}
+    function sortList(ul) {
+        var new_ul = ul.cloneNode(false);
+        var lis = [];
+        for (var i = ul.childNodes.length; i--;) {
+            if (ul.childNodes[i].nodeName === 'LI')
+                lis.push(ul.childNodes[i]);
+        }
+        lis.sort(function (a, b) {
+            return a.innerText.toLowerCase().localeCompare(b.innerText.toLowerCase());
+        });
+        for (var i = 0; i < lis.length; i++) {
+            new_ul.appendChild(lis[i]);
+        }
+        ul.parentNode.replaceChild(new_ul, ul);
+    }
+    !function () {
+        var uls = document.getElementsByTagName('ul');
+        sortList(uls[uls.length - 1]);
+    }();
+</script>
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/isotope.pkgd.min.js"></script>
+<script>
+    function getHashFilter() {
+        var hash = location.hash;
+        // get filter=filterName
+        var matches = location.hash.match(/filter=([^&]+)/i);
+        var hashFilter = matches && matches[1];
+        return hashFilter && decodeURIComponent(hashFilter);
+    }
+
+    const $grid = $('#filter-list');
+    var hash = getHashFilter() ? '.' + getHashFilter() : '*';
+    $grid.isotope({
+        // options
+        itemSelector: 'li',
+        layoutMode: 'vertical',
+        filter: hash
+    });
+
+    function hashChanged() {
+        var hash = getHashFilter() ? '.' + getHashFilter() : '*';
+        console.log(hash);
+        //set up isotope
+        $grid.isotope({
+            filter: hash
+        });
+    }
+    window.onload = hashChanged;
+    window.onhashchange = hashChanged;
+</script>

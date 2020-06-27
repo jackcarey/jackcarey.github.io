@@ -1,0 +1,28 @@
+---
+className: "intro"
+image: "/images/me.jpg"
+---
+{% capture chevronLink %}
+{% if site.data.navigation[1].url %}
+{{site.data.navigation[1].url}}
+{%else%}
+{% if site.data.navigation[1].hash %}
+{{site.baseurl}}/#{{site.data.navigation[1].hash}}
+{% else %}
+/#{{site.data.navigation[1].name | downcase | urlencode }}
+{% endif %}
+{% endif %}
+{% endcapture %}
+<header>
+    <h1 class="gilbert">{{site.data.main.title}}</h1>
+    <p class="title">{{site.data.main.description}}</p>
+    <h2>{% include social_links.html %}</h2>
+    <span class="bottom"></span>
+</header>
+<a href="{{chevronLink | strip}}" title="{{site.data.navigation[1].name}}"
+    class="jumplink {%if site.data.main.landingImg %}pic{%endif%}">
+    <span class="arrow icon solid fa-chevron-right"><span>{%if site.data.main.landingImg %}See
+            {%endif%}{{site.data.navigation[1].name}}</span></span>
+    {%if site.data.main.landingImg %}<img src="{{site.baseurl}}{{site.data.main.landingImg}}"
+        alt="{{site.data.main.landingImg}}" />{%endif%}
+</a>

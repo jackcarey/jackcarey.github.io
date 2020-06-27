@@ -1,0 +1,1 @@
+{%if include.label.size > 0 %}<a href="/{{include.page|default:'browse'}}#filter={{include.label|downcase|slugify}}" title="{{include.label | default: '' }}" class="isotope-link" data-filter=".{{include.label|downcase|slugify}}">{%include /snippets/replace_label.html label=include.label %}</a>{%endif%}

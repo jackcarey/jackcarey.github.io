@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    {%capture pageTitle %}{{page.title}}{%endcapture%}
+    {% include head.html title = pageTitle %}
+</head>
+
+<body class="is-preload">
+    <!-- Wrapper-->
+    <div id="wrapper">
+
+        <!-- Nav -->
+        {% include nav.html %}
+
+        <!-- Main -->
+        <main id="main">
+            <article {%if page.id%}id="{{page.id}}"{%endif%} class="panel {{page.className | default:""}}">
+                <header>
+                    <h2>{{page.title}}</h2>
+                    <p style="font-size:smaller">
+                        {%include /snippets/time_tag.html date = page.date %}
+                    </p>
+                    {% include cattags_this.html %}
+                </header>
+                {{content}}
+            </article>
+        </main>
+
+        <!-- Footer -->
+        {% include footer.html %}
+
+    </div>
+    <!-- Scripts -->
+    {% include scripts.html %}
+</body>
+
+</html>

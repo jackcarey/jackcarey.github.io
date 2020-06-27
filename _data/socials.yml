@@ -1,0 +1,7 @@
+# name, icon and URL are required.
+- name: GitHub
+  icon: fa-github
+  url: https://github.com/jackcarey
+- name: LinkedIn
+  icon: fa-linkedin
+  url: https://www.linkedin.com/in/jack-carey-jack-carey/

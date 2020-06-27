@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    {%capture pageTitle %}{{page.title}}{%endcapture%}
+    {% include head.html title=pageTitle %}
+</head>
+
+<body class="is-preload">
+    <!-- Wrapper-->
+    <div id="wrapper">
+
+        <!-- Nav -->
+        {% include nav.html %}
+
+        <!-- Main -->
+        <main id="main">
+            {{content}}
+        </main>
+        <!-- Footer -->
+        {% include footer.html %}
+    </div>
+    <!-- Scripts -->
+    {% include scripts.html %}
+</body>
+
+</html>

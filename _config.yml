@@ -1,0 +1,56 @@
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    line_numbers: true    
+sass:
+  sass_dir: ./assets/sass/
+  style: compressed
+
+collections:
+  posts:
+    output: true
+    permalink: /:year/:month/:day/:title/
+  index_collection:
+    output: true
+    permalink: /#:title
+  project_collection:
+    output: true
+    permalink: /projects/:slug
+
+defaults:
+  -
+    scope:
+      path: "/"
+    values:
+      layout: "articles"
+  -
+    scope:
+      path: ""
+      type: "project_collection"
+    values:
+      layout: "project"
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+      type: "pages"
+    values:
+      layout: "default"
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  -
+    scope:
+      path: ""
+      type: "drafts"
+    values:
+      layout: "post"
+  -
+    scope: # fallback on the default layout
+      path: ""
+    values:
+      layout: "default"

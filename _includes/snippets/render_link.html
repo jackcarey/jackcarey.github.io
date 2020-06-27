@@ -1,0 +1,32 @@
+{%if include.link.size >0 %}
+{% assign l={{include.link | trim }} %}
+{% assign t=page.title %}
+{%if l contains 'github.com/'%}
+
+{%assign t=t | append: " - Github" %}
+<a href="{{l}}" title="{{t}}" target="_blank"><span class="fab fa-github"></span>{{t}}</a>
+
+{%elsif l contains 'https://gsuite.google.com/marketplace/app/' %}
+
+{%assign t=t | append: " - G Suite Marketplace" %}
+<a href="{{l}}" title="{{t}}" target="_blank" ><img alt="{{t}}" src="/assets/logos/g-suite-marketplace-install.png"/></a>
+
+{%elsif l contains 'https://play.google.com/store/apps' %}
+
+{%assign t=t | append: " - Play Store" %}
+<a href="{{l}}" title="{{t}}" target="_blank" ><span class="fab fa-google-play"></span>{{t}}</a>
+
+{%elsif l contains 'https://apps.apple.com/app/apple-store/' %}
+
+{%assign t=t | append: " - App Store" %}
+<a href="{{l}}" title="{{t}}" target="_blank" ><span class="fab fa-app-store-ios"></span>{{t}}</a>
+
+{%elsif l contains 'p5js.org' %}
+
+{% assign t=t|append: ' - P5.js' %}
+<a href="{{l}}" title="{{t}}" target="_blank" ><img alt="{{t}}" src="/assets/logos/p5js.png"/></a>
+
+{%else%}
+<a href="{{l}}" title="{{t}}" target="_blank" ><span class="fas fa-link"></span>{{t}}</a>
+{%endif%}
+{%endif%}

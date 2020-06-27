@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    {%capture pageTitle %}{{page.title}}{%endcapture%}
+    {% include head.html title=pageTitle %}
+</head>
+
+<body class="is-preload">
+    <!-- Wrapper-->
+    <div id="wrapper">
+
+        <!-- Nav -->
+        {% include nav.html %}
+
+        <!-- Main -->
+        <main id="main">
+            <article {%if page.id%}id="{{page.id}}" {%endif%} class="panel {{page.className | default:""}}">
+                <header>
+                    {%if page.img %}
+                    <div class="col-5 col-12-large project-img">
+                        <img src="{{page.img}}" alt="{{page.title}}" />
+                    </div>
+                    {%endif%}
+                    <div {%if page.img %}class="col-7 col-12-large" {%endif%}>
+                        <h2>{{page.title}}</h2>
+                        <p style="font-size:smaller">
+                            {%include /snippets/time_tag.html date = page.date format="%b %Y" %}
+                            {%if page.endDate%}- {%include /snippets/time_tag.html date = page.endDate format="%b %Y" %}{%endif%}
+                            </br />
+                            {% include cattags_this.html %}
+                        </p>
+                        {%if page.links%}
+                        {%assign linkArr = page.links | split:"," %}
+                        <p class="external-link-container">
+                            {%for l in linkArr%}
+                            {% include /snippets/render_link.html link=l %}
+                            {%endfor%}
+                        </p>
+                        {%endif%}
+                    </div>
+                </header>
+                </header>
+                {{content}}
+            </article>
+        </main>
+
+        <!-- Footer -->
+        {% include footer.html %}
+
+    </div>
+    <!-- Scripts -->
+    {% include scripts.html %}
+</body>
+
+</html>

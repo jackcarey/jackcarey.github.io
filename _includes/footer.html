@@ -1,0 +1,8 @@
+<footer id="footer">
+    <span><a href="https://stonewall.org.uk" class="gilbert" target="_blank">🏳‍🌈</a></span>
+    <span>
+        &copy; {{site.time | date: "%Y"}}
+        {%if site.data.main.author %}{{site.data.main.author}}{%else%}{{site.data.main.title}}{%endif%}
+    </span>
+    {%include social_links.html %}
+</footer>

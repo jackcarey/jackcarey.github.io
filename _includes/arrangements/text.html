@@ -1,0 +1,16 @@
+{%assign doc = include.doc %}
+<a href="{{document.url}}" style="width:100%;text-align:center;vertical-align:middle;">{{document.title ||
+    document.name}}</a>
+{%else%}
+{%comment%} Default on "image" {%endcomment%}
+{%if document.img %}
+<a href="{{document.url}}" class="image contain"><img src="{{document.img}}"
+        style="height:1em;width:1em;display:inline;padding-right:0.25em;" alt="{{document.title || document.name}}"></a>
+{%elsif document.icon %}
+<a href="{{document.url}}">
+    <i title="{{document.title || document.name}}" style="padding-right:0.25em;"
+        class="{{document.iconPrefix|default:fas}} {{document.icon}}"></i>
+</a>
+{%else%}
+<a href="{{document.url}}" style="text-align:center;vertical-align:middle;">{{document.title || document.name}}</a>
+{%endif%}

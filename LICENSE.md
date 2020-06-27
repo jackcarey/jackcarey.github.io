@@ -1,0 +1,1 @@
+Private use only. Do not copy, modify or distribute the code contained within this repository without explicit written permission.

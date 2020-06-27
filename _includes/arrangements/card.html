@@ -1,0 +1,33 @@
+{%assign doc = include.doc %}
+{%assign name = doc.title || doc.name %}
+{%capture dt %}{%if doc.endDate %}{{doc.endDate | replace: "present",{{site.time}} }}{%else
+%}{{doc.date}}{%endif%}{%endcapture %}
+{%assign dtStr = dt | date:"%Y" %}
+{%assign timeStr = site.time | date:"%Y" %}
+<a class="arrangement-card {{class}}" href="{{doc.url}}">
+   <span class="flex-col flex-align-center flex-justify-between full-height">
+      {%if doc.img %}<img src="{{doc.img}}" alt="{{name}}" title="{{name}}" />
+      {%elsif doc.icon %}<i title="{{doc.title || doc.name}}" style="padding-right:0.25em;"
+         class="{{doc.iconPrefix | default: 'fas' }} {{doc.icon}}"></i><span>{{name}}</span>
+      {%else%}{%include snippets/unsplash.html q=name %}
+      {%endif%}
+      <h6 class="card-title">{{name}}</h6>
+      <p class="small no-decor text-middle">
+         {%if dtStr != timeStr %}
+         {%include snippets/time_tag.html date=dt format="%Y"%}
+         {%endif%}
+      </p>
+      <p class="flex-row flex-align-end">
+         {%for tag in doc.tags %}
+         <span class="label">
+            {% include snippets/replace_label.html label=tag %}
+         </span>
+         {%endfor %}
+         {%for cat in doc.categories %}
+         <span class="label">
+            {% include snippets/replace_label.html label=cat %}
+         </span>
+         {%endfor %}
+      </p>
+   </span>
+</a>

@@ -1,0 +1,9 @@
+{%assign width=include.width|default:""%}
+{%assign height=include.height|default:""%}
+{%assign src=include.src|default:""%}
+{%assign className=include.className|default:""%}
+{%assign alt = {{include.alt| default: include.caption}} | default:"" %}
+{%assign isLightbox = include.lightbox %}
+{%if include.caption %}<figure className="{{className}}">{%endif%}
+{%if isLightbox%}<a href="{{src}}">{%endif%}<img src="{{src}}" class="{{className}}" {%if width%}width="{{width}}" {%endif%}{%if height %}height="{{height}}" {%endif%}/>{%if isLightbox%}</a>{%endif%}
+{%if include.caption %}<figcaption>{{include.caption}}</figcaption></figure>{%endif%}

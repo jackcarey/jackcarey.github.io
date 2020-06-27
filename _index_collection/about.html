@@ -1,0 +1,26 @@
+---
+title: About
+---
+<header>
+    <h1 class="gilbert">About</h1>
+</header>
+<div class="row">
+    <div id="cv-statement" class="col-7 col-12-large">
+        Methodical, organized and committed to achieving the highest level of performance in all areas of work. I am dependable, responsible and reliable. My strength in identifying strategies and opportunities has been demonstrated through my work in property management and produces an effective working environment with a determination to succeed.
+    </div>
+    <div id="cv-education" class="col-5 col-12-large">
+        <h2>Education</h2>
+        {%for item in site.data.cv-education%}
+        {%unless item.hidden %}
+        <b>{{item.location | default: item.qualification}}<span class="f-right"><time
+                datetime="{{item.start | date: "%Y-%m-%d"}}">{{item.start | date: "%Y"}}</time>{%if item.end %}-<time
+                {%if item.end == "present" %}{%else%}datetime="{{item.end | date: "%Y-%m-%d"}}"
+                {%endif%}>{{item.end | date: "%Y"}}</time>{%endif%}</span></b>
+        <br />
+        <span>{%if item.location!="" %}{{item.qualification}} {%endif%}{{item.subject}}
+            {%if item.result %}<span class="f-right">{{item.result}}</span>{%endif%}</span>
+        <br />
+        {%endunless%}
+        {%endfor%}
+    </div>
+</div>

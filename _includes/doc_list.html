@@ -1,0 +1,29 @@
+{% assign documents = {{{{site[include.documents] | default: site.posts}} | sort:"title" | sort: "endDate" | reverse }} %}
+{% assign arrangement = include.arrangement | default: "card" %}
+{% assign limit = include.limit | default: 0 %}
+{% assign xlarge = include.xlarge | default: 12 %}
+{% assign large = include.large | default: 12 %}
+{% assign medium = include.medium | default: 12 %}
+{% assign small = include.small | default: 12 %}
+{% assign filterable = include.filterable | default: false %}
+{% assign filter = include.filter | default: "" %}
+{% assign showDesc = include.showDesc || false %}
+
+<section>
+    <div class="row doc-list">
+        {% for document in documents %}
+        {%unless document.noSearch %}
+            {% case arrangement%}
+            {%when "card" %}
+               {%include arrangements/card.html doc=document %}
+            {%when "text" %}
+               {%include arrangements/text.html doc=document %}
+            {%endcase %}
+        {%comment %} End the loop if we have reached our limit {% endcomment %}
+        {% if limit > 0 and forloop.index >= limit %}
+        {%break%}
+        {%endif%}
+        {%endunless%}
+        {% endfor %}
+    </div>
+</section>

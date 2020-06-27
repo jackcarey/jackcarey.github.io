@@ -1,0 +1,65 @@
+---
+title: Work
+---
+
+{%comment%}This page makes use of Isotope (https://isotope.metafizzy.com) to filter items{%endcomment%}
+{% capture strList %}
+{%assign str = "" %}
+{%comment%}Make a string of unique categories and tags across the site{%endcomment%}
+{%comment%} Project tags and cats need to be parsed{%endcomment%}
+{%for project in site.project_collection %}
+{%unless project.noSearch==true %}
+
+{%comment%}Page tags{%endcomment%}
+{%for tag in project.tags %}
+{% if str contains tag %}{%else%}
+{%assign str = {{str | append: tag | append: ","}} %}
+{%endif%}
+{%endfor%}
+
+{%comment%}Page categories{%endcomment%}
+{%for cat in project.categories %}
+{% if str contains cat %}{%else%}
+{%assign str = {{str | append: cat | append: ","}} %}
+{%endif%}
+{%endfor%}
+{%endunless%}
+{%endfor%}
+{{str}}
+{% endcapture%}
+{%comment%}Remove the whitespace and turn it into an indexable array{%endcomment%}
+{% assign strList = {{strList | strip | split:"," | uniq | sort}} %}
+<header>
+    <h1 class="gilbert">Work</h1>
+    {%if site.project_collection.size >=1 %}
+    <details class="isotope-controls" open>
+        <summary>Filter/Sort</summary>
+        <span id="work-filters">
+            {%for word in strList%}
+            <button>{%include snippets/replace_label.html label=word %}</button>
+            {%endfor%}
+        </span>
+        <span id="work-sorts">
+            <button>No Sort</button>
+            <button>By Title</button>
+            <button>By Date</button>
+        </span>
+    </details>
+    {%endif%}
+</header>
+{% include doc_list.html documents="project_collection" %}
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/isotope.pkgd.min.js"></script>
+<script>
+    function checkDetailsTag(event) {
+        if (event) {
+            var shouldOpen = event.target.innerWidth > 736;
+            var elems = document.getElementsByClassName("isotope-controls");
+            for (var i = 0; i < elems.length; ++i) {
+                elems[i].open = shouldOpen;
+            }
+        }
+    }
+    checkDetailsTag({target:window});
+    window.onresize = checkDetailsTag;
+</script>

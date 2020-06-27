@@ -1,0 +1,20 @@
+{%comment%}Replace links with icons, text or images{%endcomment%}
+{%if include.label%}
+{%assign str = include.label %}
+{%capture displayText%}
+    {%for item in site.data.label_replacements %}
+        {%if item.name == str %}
+            {%capture displayStr %}<span title="{{str|strip}}">{{item.text|default:str|strip}}</span>{% endcapture %}
+            {%if item.url%}
+                <img src="{{item.url}}" style="width:1em;height:1em;margin:0;object-fit:cover;" alt="{{item.text|default:str|strip}}" title="{{str|strip}}"/>
+            {%elsif item.icon %}
+                <span class="{{item.iconPrefix | default: "fas"}} fa-{{item.icon}}" title="{{str|strip}}"></span>
+            {%else%}
+                {{displayStr}}
+            {%endif%}
+            {%break%}
+        {%endif%}
+    {%endfor%}
+{%endcapture%}
+{{displayText | strip_newlines | strip | default: str }}
+{%endif%}

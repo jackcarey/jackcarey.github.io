@@ -1,0 +1,18 @@
+{%assign str="" %}
+{%assign fullStr = {{page.categories | append:" " | append: page.tags | append: " "}} %}
+{%assign array = {{fullStr | split: " "}} %}
+{%capture strList %}
+{%for word in array %}
+{%assign formattedWord = {{word|downcase|slugify}} %}
+{% if str contains formattedWord %}{%else%}
+{% assign str = {{str | append: formattedWord | append: " "}} %}
+{%endif%}
+{%endfor%}
+{{str}}
+{%endcapture%}
+{%comment%}Remove the whitespace and turn it into an indexable array{%endcomment%}
+{% assign strList = {{strList  | strip |split:" " | sort }} %}
+{%for item in strList %}
+{%assign lbl = {{item | strip | strip_newlines}} %}
+{%include /snippets/isotope_link.html label=lbl %}
+{%endfor%}

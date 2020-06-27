@@ -1,0 +1,5 @@
+{%assign x = include.width | default:"" %}
+{%assign y = include.height | default:"" %}
+{%capture dimStr%}{%if x!="" and y!="" %}{{x}}x{{y}}{%else%}{%endif%}{%endcapture%}
+{%capture url%}https://source.unsplash.com/weekly/{%if dimStr != "" and dimStr!="x" %}{{dimStr}}/{%endif%}?{{include.q}}{%endcapture%}
+{%include /snippets/image.html width=x height=y src=url alt=include.q className="unsplash-img" lightbox=false %}

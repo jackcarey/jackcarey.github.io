@@ -1,0 +1,62 @@
+---
+title: Contact
+---
+<header>
+    <h1 class="gilbert">Contact Me</h1>
+</header>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<form action="https://formspree.io/mgenvvpr" method="post">
+    <div>
+        <div class="row">
+            <div class="col-6 col-12-medium">
+                <input type="text" name="name" placeholder="Name" />
+            </div>
+            <div class="col-6 col-12-medium">
+                <input type="email" name="email" placeholder="Email" />
+            </div>
+            <div class="col-12">
+                <input type="text" name="_gotcha"/>
+                <input type="text" name="subject" list="subjects" autocomplete="off" placeholder="Subject" />
+                <datalist id="subjects">
+                    {%comment%}Create an autocomplete list from projects, categories and tags{%endcomment%}
+                    {% capture strList %}
+                    {%assign str = "CV,Projects,Jobs," %}
+                    {%comment%}Make a string of unique projects, categories and tags across the site{%endcomment%}
+                    {%for item in site["project_collection"] %}
+                    {% if str contains item.title %}{%else%}
+                    {%assign str = {{str | append: item.title | append: ","}} %}
+                    {%endif%}
+                    {%endfor%}
+                    {%for row in site.categories %}
+                    {% if str contains row[0] %}{%else%}
+                    {%assign str = {{str | append: row[0] | append: ","}} %}
+                    {%endif%}
+                    {%endfor%}
+                    {%for row in site.tags %}
+                    {% if str contains row[0] %}{%else%}
+                    {%assign str = {{str | append: row[0] | append: ","}} %}
+
+                    {%endif%}
+                    {%endfor%}
+                    {{str}}
+                    {% endcapture%}
+                    {%comment%}Remove the whitespace and turn it into an indexable array{%endcomment%}
+                    {% assign strList = {{strList| strip | split: "," | sort}} %}
+                    {%comment%} list each item as an option{%endcomment%}
+                    {%for str in strList%}
+                    <option value="{{str}}">{{str}}</option>
+                    {%endfor%}
+                </datalist>
+            </div>
+            <div class="col-12">
+                <textarea name="message" placeholder="Message" rows="6"></textarea>
+            </div>
+            <div class="col-12">
+                <div class="g-recaptcha" data-sitekey="6LdqiRUaAAAAAMFyIGN2IJhs53gkKX_hvoHZSIDe" data-size="compact"></div>
+            </div>
+            <div class="col-12">
+                <input type="submit" value="Send Message" />
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,169 @@
+---
+title: "Browse"
+layout: "articles"
+permalink: /browse-astral
+noSearch: true
+---
+
+{%comment%}This page has been replaced by browse-isotope. It is kept for posterity{%endcomment%}
+{%comment%}The page makes use of the <article/> tags in the Astral theme to show/hide listings for each category/tag{%endcomment%}
+
+{% capture strList %}
+{%assign str = "" %}
+{%comment%}Make a string of unique categories and tags across the site{%endcomment%}
+{%for row in site.categories %}
+{% if str contains row[0] %}{%else%}
+{%assign str = {{str | append: row[0] | append: ","}} %}
+{%endif%}
+{%endfor%}
+{%for row in site.tags %}
+{% if str contains row[0] %}{%else%}
+{%assign str = {{str | append: row[0] | append: ","}} %}
+{%endif%}
+{%endfor%}
+{{str}}
+{% endcapture%}
+{%comment%}Remove the whitespace and turn it into an indexable array{%endcomment%}
+{% assign strList = {{strList| strip | split: "," | uniq | sort}} %}
+
+<div id="browseLinks" style="padding:0.25em;font-size:smaller;">
+    <span style="padding-left:1em;font-size:large;vertical-align:bottom; ">Browse: </span>
+    {%for str in strList %}
+        {%include /snippets/cattag_link.html label=str slug=page.permalink %}
+    {%endfor%}
+</div>
+{%comment%}For every item in the array{%endcomment%}
+{%for str in strList %}
+<article id="{{ str | slugify }}" class="panel">
+    {%capture label%}{%include /snippets/replace_label.html label=str %}{%endcapture%}
+    {%comment%}Remove all unnecessary space around label and str {%endcomment%}
+    {%capture lbl%}{{label|strip_html|strip_newlines|strip}}{%endcapture%}
+    {%capture strStrip%}{{str|strip_html|strip_newlines|strip}}{%endcapture%}
+    <h4>{%if lbl == strStrip %}{%else%}{{label}} {%endif%}{{str|strip|capitalize}}</h4>
+    <br />
+    <ul style="list-style: none;">
+        {%comment%}grab posts by category AND tag {%endcomment%}
+        {%assign catPosts = site.categories[str] %}
+        {%assign tagPosts = site.tags[str] %}
+        {%assign listed = "" %}
+
+        {%for p in catPosts%}
+        {% assign postID = {{p.date | date: "%Y%m%d" | append: "-" | append: {{p.title | slugify }} }} %}
+        {%if listed contains postID%}{%else%}
+
+        <li data-postid="{{postID}}">
+            <a href="{{site.baseurl}}{{p.url}}" class="post-item">
+                {% if p.img %}
+                <img src="{{site.baseurl}}{{p.img}}" class="image fit"
+                    style="padding:0.25em;display:inline;height:3em;width:3em;" />
+                {%elsif p.icon%}
+                    <i class="{{p.iconPrefix|default: fas}} {{p.icon}}" style="padding:0.25em;display:inline;font-size:2em; "></i>
+                {%else%}
+                <span style="padding:0.25em;display:inline;width:3em;height:3em;"></span>
+                {%endif%}
+                <div style="padding: 0.25em;">
+                    {{p.title || default: p.name}}
+                    <br />
+                    <span style="font-size:smaller;font-style:italic;">{{p.date | date: "%d %b %Y"}}</span>
+                </div>
+            </a>
+        </li>
+
+        {%comment%}Add this ID to the list so it isnt displayed more than once per article{%endcomment%}
+        {%assign listed = listed | append: postID | append: "|" %}
+        {%endif%}
+        {%endfor %}
+
+        {%for p in tagPosts%}
+        {% assign postID = {{p.date | date: "%Y%m%d" | append: "-" | append: {{p.title | slugify }} }} %}
+        {%if listed contains postID%}{%else%}
+
+        <li data-postid="{{postID}}">
+            <a href="{{site.baseurl}}{{p.url}}" style="text-decoration:none;display:flex;justify-content: left;">
+                {% if p.img %}
+                <img src="{{site.baseurl}}{{p.img}}" class="image fit"
+                    style="padding:0.25em;display:inline;height:3em;width:3em;" />
+                {%elsif p.icon%}
+                    <i class="{{p.iconPrefix|default: fas}} {{p.icon}}" style="padding:0.25em;display:inline;font-size:2em;"></i>
+                {%else%}
+                {%else%}
+                <span style="padding:0.25em;display:inline;width:3em;height:3em;"></span>
+                {%endif%}
+                <div style="padding: 0.25em;">
+                    {{p.title || default: p.name}}
+                    <br />
+                    <span style="font-size:smaller;font-style:italic;">{{p.date | date: "%d %b %Y"}}</span>
+                </div>
+            </a>
+        </li>
+
+        {%comment%}Add this ID to the list so it isnt displayed more than once{%endcomment%}
+        {%assign listed = listed | append: postID | append: "|" %}
+        {%endif%}
+        {%endfor %}
+
+    </ul>
+</article>
+{%endfor%}
+<article id="noResults" class="panel">
+    <h4>No results match found <span id="noResStr">for this category/tag</span>, sorry.</h4>
+</article>
+<script>
+    function displayPanel() {
+        //only display the filtered panel
+        var hash = (window.location.hash || "#").substring(1);
+        var count = 0;
+
+        //reset all link styles
+        document.querySelectorAll("#browseLinks a:not([href='" + window.location.hash + "'])").forEach(function (item, index, itemObj) {
+            item.style.fontWeight = "initial";
+        });
+        //if there is a URL hash
+        if (hash != "") {
+            //highlight the selected filter in the browse list
+            var browseLink = document.querySelector("#browseLinks a[href='#" + hash + "']")
+            if (browseLink) {
+                browseLink.style.fontWeight = "bold";
+            }
+
+            //get all articles
+            var sections = document.querySelectorAll("article");
+            var changedSections = [];
+            for (var i = 0; i < sections.length; ++i) {
+                var id = sections[i].getAttribute("id");
+                //hide/display the article if the id matches the hash
+                sections[i].classList[((id == "noResults" && hash) || id == hash) ? "remove" : "add"]("inactive");
+                sections[i].style = id == hash ? "" : "display:none;";
+                count += id == hash ? 1 : 0;
+            }
+        }
+        //if no panels are active, show the noResults panel
+        document.getElementById("noResults").style = "padding:3em;" + (hash != "" && !count ? "display:block;" : "display:none;");
+        const noResStr = document.getElementById("noResStr")
+        noResStr.innerText = "for " + (hash != "" && !count ? "'" + hash + "'" : "this category/tag");
+        noResStr.style.fontStyle = (hash != "" && !count ? "italic" : "none");
+        document.title = (hash == "" && !count ? "{{page.title}}" : hash.substring(0, 1).toUpperCase() + hash.substring(1).toLowerCase()) + " | {{site.data.main.title}}";
+    }
+    function sortLists() {
+        //grab all lists
+        var lists = document.querySelectorAll("#main ul");
+        lists.forEach(function (ul, ulIndex, listObj) {
+            //grab all list items with each list
+            const items = ul.querySelectorAll("li");
+            items.forEach(function (li, liIndex, itemObj) {
+                const thisID = li.dataset.postid;
+                const nextID = liIndex + 1 < items.length ? items[liIndex + 1].dataset.postid : "";
+                //if this id is less than the next one, swap them for descending order
+                if (nextID && thisID < nextID) {
+                    li.parentNode.insertBefore(items[liIndex + 1], li);
+                }
+            });
+        });
+    }
+    function loadFunc() {
+        displayPanel();
+        sortLists();
+    }
+    window.addEventListener("load",loadFunc);
+    window.onhashchange = displayPanel;
+</script>
