@@ -9,8 +9,6 @@
   noSearch: true
 - name: Work
   icon: fa-file-code
-- name: Contact
-  icon: fa-envelope
 - name: LinkedIn
   url: https://www.linkedin.com/in/jack-carey-jack-carey/
   icon: fa-linkedin
@@ -21,4 +19,6 @@
   icon: fa-github
   iconPrefix: fab
   target: _blank
+- name: Contact
+  icon: fa-envelope
 

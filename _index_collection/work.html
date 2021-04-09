@@ -31,6 +31,7 @@ title: Work
 {% assign strList = {{strList | strip | split:"," | uniq | sort}} %}
 <header>
     <h1 class="gilbert">Work</h1>
+    {%comment%}
     {%if site.project_collection.size >=1 %}
     <details class="isotope-controls" open>
         <summary>Filter/Sort</summary>
@@ -46,6 +47,7 @@ title: Work
         </span>
     </details>
     {%endif%}
+    {%endcomment%}
 </header>
 {% include doc_list.html documents="project_collection" %}
 <script src="/assets/js/jquery.min.js"></script>
