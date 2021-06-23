@@ -23,6 +23,10 @@ image: "/images/me.jpg"
     class="jumplink {%if site.data.main.landingImg %}pic{%endif%}">
     <span class="arrow icon solid fa-chevron-right"><span>{%if site.data.main.landingImg %}See
             {%endif%}{{site.data.navigation[1].name}}</span></span>
-    {%if site.data.main.landingImg %}<img src="{{site.baseurl}}{{site.data.main.landingImg}}"
-        alt="{{site.data.main.landingImg}}" />{%endif%}
+    {%if site.data.main.landingImg %}
+    <picture>
+        <source srcset="{{site.baseurl}}{{site.data.main.landingImg}}">
+        <source srcset=
+    <img src="https://hcti.io/v1/image/93f9c545-100f-4ad0-8a38-fd948615df8f?width=400"
+        alt="{{site.data.main.landingImg}}" /></picture>{%endif%}
 </a>
